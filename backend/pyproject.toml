@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neural-protocol-backend"
+version = "0.1.0"
+description = "Neural Protocol — SME Cybersecurity Posture Assistant Backend"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "aiosqlite>=0.20.0",            # SQLite async driver (dev); swap for asyncpg in prod
+    "asyncpg>=0.29.0",              # PostgreSQL async driver
+    "httpx>=0.27.0",
+    "dnspython>=2.6.0",
+    "python-multipart>=0.0.9",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "reportlab>=4.2.0",
+    "python-dotenv>=1.0.0",
+    "anyio>=4.4.0",
+    "python-nmap>=0.7.1",
+    "openai>=1.35.0",               # Module #2: AI Plain Language Findings
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
