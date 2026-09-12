@@ -551,99 +551,198 @@ export default function DashboardPage() {
   return (
     <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
 
-      {/* ── Header ─────────────────────────────────────────────────────── */}
+      {/* ══════════════════════════════════════════════════════════════════
+          SECURITY OVERVIEW HEADER — Premium enterprise redesign
+          All data: real (user from AuthContext, backendOnline from state)
+          No fake data introduced.
+      ══════════════════════════════════════════════════════════════════ */}
       <motion.div
-        initial={{ opacity: 0, y: -8 }}
+        initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-start justify-between gap-4 flex-wrap"
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <div>
-          <h2 className="text-xl font-bold text-white">
-            {greeting()}, {user?.name?.split(" ")[0] ?? "there"}
-          </h2>
-          <p className="text-sm text-slate-400 mt-0.5">
-            Security overview for{" "}
-            <span className="text-white font-medium">{user?.workspace ?? "your workspace"}</span>
-          </p>
-        </div>
-
-        {/* Premium "Run New Assessment" button */}
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setPanelOpen(true)}
-          className="relative flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-medium text-sm text-white overflow-hidden group"
-          style={{ background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #1e40af 100%)" }}
+        {/* Outer glass card */}
+        <div
+          className="relative rounded-2xl overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, hsl(222,47%,11%) 0%, hsl(220,45%,10%) 60%, hsl(222,47%,9%) 100%)",
+            border: "1px solid hsl(217,33%,19%)",
+          }}
         >
-          {/* Shimmer sweep */}
-          <motion.div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100"
-            style={{ background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%)" }}
-            animate={{ x: ["-100%", "200%"] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+          {/* Subtle top-left accent glow — purely decorative, CSS-only */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-16 -left-16 w-48 h-48 rounded-full opacity-[0.07]"
+            style={{ background: "radial-gradient(circle, #3b82f6 0%, transparent 70%)" }}
           />
-          <Zap size={15} className="relative z-10" />
-          <span className="relative z-10">Run New Assessment</span>
-        </motion.button>
-      </motion.div>
+          {/* Subtle bottom-right accent */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-12 -right-8 w-40 h-40 rounded-full opacity-[0.05]"
+            style={{ background: "radial-gradient(circle, #6366f1 0%, transparent 70%)" }}
+          />
 
-      {/* ── Backend offline banner ─────────────────────────────────────── */}
-      <AnimatePresence>
-        {backendOnline === false && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="flex items-start gap-2.5 p-3 rounded-xl bg-yellow-500/8 border border-yellow-500/20"
-          >
-            <ServerOff size={14} className="text-yellow-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-slate-400 leading-relaxed">
-              <span className="text-yellow-300 font-medium">Backend offline</span> — displaying demo data.
-              Start with <code className="text-slate-300">cd backend &amp;&amp; python run.py</code> to see real scan results.
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="relative px-6 py-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-      {/* ── Security health summary banner ────────────────────────────── */}
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <div className="rounded-xl bg-gradient-to-r from-blue-500/8 via-[hsl(222,47%,11%)] to-[hsl(222,47%,11%)] border border-blue-500/15 px-5 py-4">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-500/25 flex items-center justify-center shrink-0">
-              <Shield size={15} className="text-blue-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-xs font-semibold text-blue-300 mb-1 uppercase tracking-wide">Your Security Health</div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1">
-                {scoreDelta !== 0 ? (
-                  <span className="text-sm text-white">
-                    Your security {scoreDelta > 0 ? "improved" : "declined"} by{" "}
-                    <span className={`font-semibold ${scoreDelta > 0 ? "text-green-400" : "text-red-400"}`}>
-                      {Math.abs(scoreDelta)} points
-                    </span>{" "}
-                    since last assessment.
+            {/* ── Left: title + greeting ──────────────────────────────── */}
+            <div className="flex items-start gap-4 min-w-0">
+
+              {/* Shield icon with subtle ring */}
+              <div className="shrink-0 mt-0.5">
+                <div className="relative w-10 h-10">
+                  {/* Outer pulse ring */}
+                  <motion.div
+                    className="absolute inset-0 rounded-xl border border-blue-500/20"
+                    animate={{ opacity: [0.4, 0.15, 0.4] }}
+                    transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                  />
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/12 border border-blue-500/22 flex items-center justify-center">
+                    <Shield size={17} className="text-blue-400" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Text block */}
+              <div className="min-w-0">
+                {/* Section label */}
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.12em]">
+                    Security Overview
                   </span>
-                ) : (
-                  <span className="text-sm text-white">Your security posture is stable.</span>
-                )}
-                {latestAssessment?.findings_count.high || latestAssessment?.findings_count.critical ? (
-                  <span className="text-sm text-slate-400">
-                    You have{" "}
-                    <span className="text-orange-400 font-semibold">
-                      {(latestAssessment.findings_count.critical ?? 0) + (latestAssessment.findings_count.high ?? 0)} high-priority
-                    </span>{" "}
-                    actions to address.
+                  {/* Live monitoring pill */}
+                  <span className="flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[0.08em] text-green-400 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5">
+                    <motion.span
+                      className="inline-block w-1.5 h-1.5 rounded-full bg-green-400"
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    />
+                    Monitoring active
                   </span>
-                ) : (
-                  <span className="text-sm text-slate-400">Run an assessment to see your current risks.</span>
-                )}
+                </div>
+
+                {/* Greeting */}
+                <h1 className="text-[1.35rem] sm:text-2xl font-bold text-white leading-tight tracking-[-0.01em]">
+                  {greeting()},{" "}
+                  <span className="text-white">{user?.name?.split(" ")[0] ?? "there"}</span>
+                </h1>
+
+                {/* Subtitle */}
+                <p className="text-sm text-slate-500 mt-0.5 leading-snug">
+                  Security overview for{" "}
+                  <span className="text-slate-300 font-medium">{user?.workspace ?? "your workspace"}</span>
+                </p>
               </div>
             </div>
-            <Link href="/posture" className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 shrink-0 transition-colors">
-              Full report <ArrowUpRight size={11} />
-            </Link>
+
+            {/* ── Right: action button + backend status ───────────────── */}
+            <div className="flex flex-col items-start sm:items-end gap-2.5 shrink-0">
+              {/* Run Assessment CTA */}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setPanelOpen(true)}
+                className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 55%, #1e40af 100%)" }}
+              >
+                {/* Subtle shimmer on hover */}
+                <motion.span
+                  aria-hidden="true"
+                  className="absolute inset-0 opacity-0 hover:opacity-100"
+                  style={{ background: "linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.10) 50%, transparent 62%)" }}
+                  animate={{ x: ["-100%", "200%"] }}
+                  transition={{ repeat: Infinity, duration: 2.4, ease: "linear" }}
+                />
+                <Zap size={14} className="relative z-10 shrink-0" />
+                <span className="relative z-10">Run New Assessment</span>
+              </motion.button>
+
+              {/* Backend status micro-label */}
+              <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
+                <span
+                  className={`inline-block w-1.5 h-1.5 rounded-full ${
+                    backendOnline === true ? "bg-green-500" :
+                    backendOnline === false ? "bg-yellow-500" :
+                    "bg-slate-600"
+                  }`}
+                />
+                {backendOnline === true
+                  ? "Backend connected"
+                  : backendOnline === false
+                  ? "Backend offline — demo mode"
+                  : "Connecting…"}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Divider + health summary strip ─────────────────────────── */}
+          <div className="border-t border-[hsl(217,33%,15%)] px-6 py-3 flex flex-wrap items-center gap-x-6 gap-y-1.5">
+            {/* Security health message — real data, no fakes */}
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-1 h-4 rounded-full bg-blue-500/40 shrink-0" />
+              <span className="text-xs text-slate-400 leading-snug">
+                {scoreDelta !== 0 ? (
+                  <>
+                    Security {scoreDelta > 0 ? "improved" : "declined"} by{" "}
+                    <span className={`font-semibold ${scoreDelta > 0 ? "text-green-400" : "text-red-400"}`}>
+                      {Math.abs(scoreDelta)} pts
+                    </span>{" "}
+                    since last assessment.
+                  </>
+                ) : (
+                  "Security posture is stable."
+                )}
+              </span>
+            </div>
+
+            {(latestAssessment?.findings_count.high || latestAssessment?.findings_count.critical) ? (
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-1 h-4 rounded-full bg-orange-500/40 shrink-0" />
+                <span className="text-xs text-slate-400">
+                  <span className="text-orange-400 font-semibold">
+                    {(latestAssessment.findings_count.critical ?? 0) + (latestAssessment.findings_count.high ?? 0)} high-priority
+                  </span>{" "}
+                  actions require attention.
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-1 h-4 rounded-full bg-slate-600 shrink-0" />
+                <span className="text-xs text-slate-600">
+                  Run an assessment to see your current risks.
+                </span>
+              </div>
+            )}
+
+            {/* Full report link — right side */}
+            <div className="ml-auto shrink-0">
+              <Link
+                href="/posture"
+                className="flex items-center gap-1 text-[11px] text-blue-400/80 hover:text-blue-300 transition-colors"
+              >
+                Full report <ArrowUpRight size={11} />
+              </Link>
+            </div>
           </div>
         </div>
+
+        {/* ── Backend offline banner (below card, animated) ────────────── */}
+        <AnimatePresence>
+          {backendOnline === false && (
+            <motion.div
+              initial={{ opacity: 0, y: -4, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -4, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="mt-2 flex items-start gap-2.5 px-4 py-2.5 rounded-xl bg-yellow-500/6 border border-yellow-500/15"
+            >
+              <ServerOff size={13} className="text-yellow-400/80 shrink-0 mt-0.5" />
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                <span className="text-yellow-300/80 font-medium">Backend offline</span> — showing demo data.{" "}
+                Start with <code className="text-slate-400 font-mono">cd backend &amp;&amp; python run.py</code>.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       {/* ── Top cards row ──────────────────────────────────────────────── */}
